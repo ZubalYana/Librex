@@ -10,17 +10,33 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-enum ROLE{
+enum Role{
   USER
   ADMIN
 }
 
-model USER{
-  id  STRING  @id @default(uuid())
-  name STRING
-  email STRING @unique
-  password STRING
+model User{
+  id  String  @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role Role @default(USER)
+  avatar String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  books Book[]
+}
+
+model Book{
+  id String @id @default(uuid())
+  name String
+  author String
+  photoUrl String?
+  createdAt DateTime @default(now())
+
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId String
 }
