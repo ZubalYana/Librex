@@ -1,27 +1,17 @@
 import type { Request, Response } from "express";
 import { getPrisma } from "../utils/db.js";
 
-export async function createBook(req: Request, res: Response){
+export async function getAllBooks(res: Response){
     try{
         const prisma = getPrisma();
-        const  { name, description, author, photoUrl, ownerId } = req.body;
-
-        if(!name || !author || !ownerId){
-            res.status(400).json({message: 'Lacking required credentials'});
+        const books = await prisma.book.findMany();
+        if(!books){
+            res.status(404).json({message: 'Books not found'});
             return;
         }
-
-        const book = await prisma.book.create({data: {name, description, author, photoUrl, ownerId}});
-
-        res.status(201).json({book})
+        res.status(200).json({books});
     }catch(err){
-        const message = err instanceof Error? err.message : 'Unknown error while creating your book';
-        res.status(500).json({message: message})
-    } 
-}
-
-export async function getAllBooks(req: Request, res: Response){
-    try{
-
-    }catch(err){}
+        const message = err instanceof Error? err.message : 'Unknown error while fetching books';
+        return res.status(500).json({message: message});
+    }
 }
