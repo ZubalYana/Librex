@@ -12,6 +12,6 @@ export async function getAllBooks(res: Response){
         res.status(200).json({books});
     }catch(err){
         const message = err instanceof Error? err.message : 'Unknown error while fetching books';
-        return res.status(500).json({message: message});
+        res.status(500).json({message: message});
     }
 }
