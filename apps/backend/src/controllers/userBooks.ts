@@ -4,7 +4,8 @@ import { getPrisma } from "../utils/db.js";
 export async function createBook(req: Request, res: Response){
     try{
         const prisma = getPrisma();
-        const  { name, description, author, photoUrl, ownerId } = req.body;
+        const  { name, description, author, photoUrl } = req.body;
+        const ownerId = req.user?.userId;
 
         if(!name || !author || !ownerId){
             res.status(400).json({message: 'Lacking required credentials'});
@@ -23,7 +24,7 @@ export async function createBook(req: Request, res: Response){
 export async function getUsersBooks(req: Request, res: Response){
     try{
         const prisma = getPrisma();
-        const userId = req.params.userId;
+        const userId = req.user?.userId;
         if(!userId){
             res.status(400).json({message: 'Lacking user id to perform'});
             return
