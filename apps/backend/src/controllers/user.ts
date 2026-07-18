@@ -20,3 +20,4 @@ export async function userPrivateProfile(req: Request, res: Response){
         res.status(500).json({message: message});
     }
 }
+
