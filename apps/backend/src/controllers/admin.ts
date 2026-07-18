@@ -120,3 +120,47 @@ export async function deleteAllUsersBooks(req: Request, res: Response){
         res.status(500).json({message: message});
     }
 }
+
+export async function editUserRole(req: Request, res: Response){
+    try{
+        const prisma = getPrisma();
+        const userId = req.params.userId;
+        
+        if(req.user?.role !== 'ADMIN'){
+            res.status(403).json({message: 'Forbidden access'});
+            return;
+        }
+
+        if(!userId){
+            res.status(400).json({message: 'User id not provided'});
+            return;
+        }
+
+        const user = await prisma.user.findUnique({where: {id: String(userId)}});
+
+        if (!user) {
+           res.status(404).json({ message: 'User not found' });
+           return;
+        }
+
+        if (userId === req.user?.userId) {
+           res.status(400).json({ message: 'You cannot change your own role' });
+           return;
+        }
+
+        const currentUserRole = user?.role;
+        
+        const updatedUser = await prisma.user.update({
+            where: {id: String(userId)},
+            data: {
+                role: currentUserRole === 'USER'? 'ADMIN' : 'USER',
+            },
+            select: { id: true, name: true, email: true, role: true, avatar: true, createdAt: true, updatedAt: true }
+        });
+
+        res.status(200).json({message: 'User role toggled successfully', user: updatedUser});
+    }catch(err){
+        const message = err instanceof Error? err.message : 'Uknown error';
+        res.status(500).json({message: message});
+    }
+}
