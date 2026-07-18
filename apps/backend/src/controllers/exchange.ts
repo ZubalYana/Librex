@@ -41,7 +41,7 @@ export async function requestExchange(req: Request, res: Response) {
       .join("");
 
     await resend.emails.send({
-      from: "Librex <exchange@librex.pictureboooks.homes.com>",
+      from: "Librex <exchange@librex.pictureboooks.homes>",
       to: bookForExchange.owner.email,
       subject: `Exchange request for "${bookForExchange.name}"`,
       html: `

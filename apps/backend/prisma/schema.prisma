@@ -30,6 +30,10 @@ model User{
 
   resetTokenHash String?
   resetTokenExpiry DateTime?
+
+  pendingEmail String?
+  emailChangeTokenHash String?
+  emailChangeExpiry DateTime?
 }
 
 model Book{
