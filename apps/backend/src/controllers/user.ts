@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { getPrisma } from "../utils/db.js";
-import { resend } from "../utils/resend.js";
+import { getResend } from "../utils/resend.js";
 import crypto from "crypto";
 import bcrypt from 'bcrypt';
 
@@ -30,6 +30,7 @@ export async function userPrivateProfile(req: Request, res: Response) {
 export async function forgotPassword(req: Request, res: Response) {
   try {
     const prisma = getPrisma();
+    const resend = getResend();
     const { email } = req.body;
 
     if (!email) {

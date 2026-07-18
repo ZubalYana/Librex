@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
 import { getPrisma } from "../utils/db.js";
-import { resend } from "../utils/resend.js";
+import { getResend } from "../utils/resend.js";
 
 export async function requestExchange(req: Request, res: Response) {
   try {
     const prisma = getPrisma();
+    const resend = getResend();
     const userId = req.user?.userId;
     const bookId = req.params.bookId;
 
