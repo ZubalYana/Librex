@@ -119,3 +119,22 @@ export async function resetPassword(req: Request, res: Response){
         res.status(500).json({message: message});
     }
 }
+
+export async function editUserName(req: Request, res: Response){
+    try{
+        const prisma = getPrisma();
+        const {newUserName} = req.body;
+
+        if(newUserName.trim() === ""){
+            res.status(400).json({message: 'Name cannot be an emtpy string'});
+            return;
+        }
+
+        const user = await prisma.user.update({where: {id: String(req.user?.userId)}, data: { name: newUserName.trim() }});
+
+        res.status(200).json({message: 'Name updated successfully', user: user});
+    }catch(err){
+        const message = err instanceof Error? err.message : 'Unknown error';
+        res.status(500).json({message: message});
+    }
+}
