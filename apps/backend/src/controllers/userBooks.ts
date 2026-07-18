@@ -1,24 +1,40 @@
 import type { Request, Response } from "express";
 import { getPrisma } from "../utils/db.js";
+import { getCloudinary } from "../utils/cloudinary.js";
+import fs from "fs"
 
-export async function createBook(req: Request, res: Response){
-    try{
-        const prisma = getPrisma();
-        const  { name, description, author, photoUrl } = req.body;
-        const ownerId = req.user?.userId;
+export async function createBook(req: Request, res: Response) {
+  try {
+    const prisma = getPrisma();
+    const cloudinary = getCloudinary();
+    const { name, description, author, photoUrl: providedPhotoUrl } = req.body;
+    const ownerId = req.user?.userId;
 
-        if(!name || !author || !ownerId){
-            res.status(400).json({message: 'Lacking required credentials'});
-            return;
-        }
+    if (!name || !author || !ownerId) {
+      res.status(400).json({ message: 'Lacking required credentials' });
+      return;
+    }
 
-        const book = await prisma.book.create({data: {name, description, author, photoUrl, ownerId}});
+    let photoUrl: string | null = providedPhotoUrl ?? null;
 
-        res.status(201).json({book})
-    }catch(err){
-        const message = err instanceof Error? err.message : 'Unknown error while creating your book';
-        res.status(500).json({message: message})
-    } 
+    if (req.file) {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, { folder: 'librex-bookPhotos' });
+      fs.unlinkSync(req.file.path);
+      photoUrl = uploadResult.secure_url;
+    }
+
+    const book = await prisma.book.create({
+      data: { name, description, author, photoUrl, ownerId },
+    });
+
+    res.status(201).json({ book });
+  } catch (err) {
+    if (req.file?.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    const message = err instanceof Error ? err.message : 'Unknown error while creating your book';
+    res.status(500).json({ message: message });
+  }
 }
 
 export async function getUsersBooks(req: Request, res: Response){
