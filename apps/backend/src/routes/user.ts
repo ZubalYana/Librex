@@ -6,8 +6,8 @@ import { upload } from "../utils/multer.js";
 const router = Router();
 
 router.get('/profile', AuthMiddleware, userPrivateProfile);
-router.post('/forgot-password', AuthMiddleware, forgotPassword);
-router.put('/reset-password', AuthMiddleware, resetPassword);
+router.post('/forgot-password', forgotPassword);
+router.put('/reset-password', resetPassword);
 router.post('/edit-email', AuthMiddleware, editUserEmail);
 router.put('/confirm-newEmail', AuthMiddleware, confirmEmailEditing);
 router.put('/upload-avatar', AuthMiddleware, upload.single('avatar'), uploadAvatar);
