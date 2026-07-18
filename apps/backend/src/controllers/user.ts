@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { getPrisma } from "../utils/db.js";
 import { resend } from "../utils/resend.js";
 import crypto from "crypto";
+import bcrypt from 'bcrypt';
 
 export async function userPrivateProfile(req: Request, res: Response) {
   try {
@@ -69,4 +70,51 @@ export async function forgotPassword(req: Request, res: Response) {
     const message = err instanceof Error ? err.message : "Unknown error";
     res.status(500).json({ message: message });
   }
+}
+
+export async function resetPassword(req: Request, res: Response){
+    try{
+        const prisma = getPrisma();
+        const {email, token, newPassword} = req.body;
+
+        if(!email || !token || !newPassword){
+            res.status(400).json({message: 'Invalid or expired reset link'});
+            return;
+        }
+
+        const user = await prisma.user.findUnique({where: {email: email}});
+
+        if(!user || !user.resetTokenHash || !user.resetTokenExpiry){
+            res.status(400).json({message: 'Invalid or expired reset link'});
+            return;
+        }
+
+        if(user.resetTokenExpiry < new Date()){
+            res.status(400).json({message: 'Invalid or expired reset link'});
+            return;
+        }
+
+        const incomingHash = crypto.createHash("sha256").update(token).digest("hex");
+
+        if(incomingHash !== user.resetTokenHash){
+            res.status(400).json({message: 'Invalid or expired reset link'});
+            return;
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await prisma.user.update({
+            where: {id: user.id},
+            data: {
+                password: hashedPassword,
+                resetTokenExpiry: null,
+                resetTokenHash: null,
+            },
+        });
+
+        res.status(200).json({message: 'Password reset successfully'});
+    }catch(err){
+        const message = err instanceof Error? err.message : 'Unknown error while reseting password';
+        res.status(500).json({message: message});
+    }
 }
