@@ -3,6 +3,8 @@ import { getPrisma } from "../utils/db.js";
 import { getResend } from "../utils/resend.js";
 import crypto from "crypto";
 import bcrypt from 'bcrypt';
+import fs from "fs";
+import { getCloudinary } from "../utils/cloudinary.js";
 
 export async function userPrivateProfile(req: Request, res: Response) {
   try {
@@ -234,4 +236,33 @@ export async function confirmEmailEditing(req: Request, res: Response){
         const message = err instanceof Error? err.message : 'Unknow error';
         res.status(500).json({message: message});
     }
+}
+
+export async function uploadAvatar(req: Request, res: Response) {
+  try {
+    const prisma = getPrisma();
+    const cloudinary = getCloudinary();
+
+    if (!req.file) {
+      res.status(400).json({ message: 'No file uploaded' });
+      return;
+    }
+
+    const uploadResponse = await cloudinary.uploader.upload(req.file.path, { folder: 'librex-avatars' });
+
+    fs.unlinkSync(req.file.path);
+
+    await prisma.user.update({
+      where: { id: String(req.user?.userId) },
+      data: { avatar: uploadResponse.secure_url },
+    });
+
+    res.status(200).json({ message: 'Avatar updated successfully', avatar: uploadResponse.secure_url });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error while uploading avatar';
+    if (req.file?.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    res.status(500).json({ message: message });
+  }
 }
