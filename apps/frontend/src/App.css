@@ -14,12 +14,10 @@ html {
 
 h1, h2, h3, h4, h5, h6, button{
     font-family: Lora;
-    color: #2B2D42;
 }
 
 a, link, p, span, div{
     font-family: Inter;
-    color: #2B2D42;
 }
 
 ::-webkit-scrollbar {
