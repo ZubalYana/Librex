@@ -5,6 +5,7 @@ import Register from "./components/pages/Register";
 import Login from "./components/pages/Login";
 
 import ProtectedRoute from "./components/functional/ProtectedRoute";
+import AdminProtectedRoute from "./components/functional/AdminProtectedRoute";
 import AdminDashboard from "./components/pages/AdminDashboard";
 import BookDetails from "./components/pages/BookDetails";
 import BooksList from "./components/pages/BooksList";
@@ -24,7 +25,10 @@ function App() {
           <Route path="/books/:bookId" element={<BookDetails />} />
           <Route path="/me" element={<Profile />} />
           <Route path="/me/books" element={<MyBooks />} />
+
+          <Route element={<AdminProtectedRoute/>}>
           <Route path="/admin" element={<AdminDashboard />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
