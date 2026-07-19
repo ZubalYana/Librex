@@ -21,13 +21,13 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path="/app" element={<ProtectedRoute />}>
-          <Route path="/books" element={<BooksList />} />
-          <Route path="/books/:bookId" element={<BookDetails />} />
-          <Route path="/me" element={<Profile />} />
-          <Route path="/me/books" element={<MyBooks />} />
+          <Route path="/app/books" element={<BooksList />} />
+          <Route path="/app/books/:bookId" element={<BookDetails />} />
+          <Route path="/app/me" element={<Profile />} />
+          <Route path="/app/me/books" element={<MyBooks />} />
 
           <Route element={<AdminProtectedRoute/>}>
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/app/admin" element={<AdminDashboard />} />
           </Route>
         </Route>
       </Routes>
