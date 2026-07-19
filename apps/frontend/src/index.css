@@ -1,1 +1,11 @@
-@tailwindcss
+@import "tailwindcss";
+
+@theme {
+  --color-parchment: #FDFBF7; 
+  --color-ink: #2B2D42;       
+  --color-navy: #14213D;     
+  --color-accent: #E07A5F;   
+
+  --font-serif: "Lora", serif;   
+  --font-sans: "Inter", sans-serif; 
+}
