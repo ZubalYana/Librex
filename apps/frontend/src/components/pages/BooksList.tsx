@@ -43,7 +43,9 @@ export default function BooksList() {
       ) : (
         <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
-            <BookCard book={book} key={book.id} />
+            <a href={`/app/books/${book.id}`} key={book.id} >
+            <BookCard book={book} />
+            </a>
           ))}
         </div>
       )}

@@ -1,20 +1,7 @@
 import { useState } from "react";
 import { BookOpen } from "lucide-react";
 
-type Owner = {
-  name: string;
-  avatar: string;
-  email: string;
-};
-
-type Book = {
-  id: string;
-  name: string;
-  description: string;
-  photoUrl: string | null;
-  author: string;
-  owner: Owner;
-};
+import type { Book } from "../../types/Book";
 
 interface BookCardProps {
   book: Book;
