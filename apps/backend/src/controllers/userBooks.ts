@@ -64,7 +64,6 @@ export async function getUsersBooks(req: Request, res: Response){
 
 export async function editUsersBook(req: Request, res: Response){
     try{
-        console.log('Req.body:', req.body)
         const prisma = getPrisma();
         const cloudinary = getCloudinary();
         const { name, description, author } = req.body;

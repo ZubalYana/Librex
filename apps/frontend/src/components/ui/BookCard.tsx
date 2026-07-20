@@ -13,9 +13,10 @@ interface BookCardProps {
   book: Book;
   openedInMyBooks?: boolean;
   onDeleted?: (bookId: string)=>void;
+  onEdited?: (updatedBook: Book) => void;
 }
 
-export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardProps) {
+export default function BookCard({ book, openedInMyBooks, onDeleted, onEdited }: BookCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
   const [confirmationOpened, setConfirmationOpened] = useState(false);
   const [editingMode, setEditingMode] = useState(false);
@@ -39,7 +40,11 @@ export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardP
       });
   };
 
-  const handleBookEdited = () => {};
+  const handleBookEdited = (data: any) => {
+    if (onEdited) {
+      onEdited(data.updatedBook);
+    }
+  };
 
   return (
     <div onClick={() => navigate(`/app/books/${book.id}`)} className="w-[170px] h-[260px] z-10 md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">

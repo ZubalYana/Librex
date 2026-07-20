@@ -84,7 +84,6 @@ export default function BookControl({
       formData.append("photo", photoUrl);
     }
 
-    console.log('FormData:', formData)
     apiFetch(`/userBooks/${book.id}`, {
       method: "PATCH",
       body: formData,

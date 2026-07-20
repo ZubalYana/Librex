@@ -72,7 +72,7 @@ export default function MyBooks() {
         <div className='w-full h-full flex-1'>
         <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
-              <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} key={book.id} />
+              <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} onEdited={handleBookEdited} key={book.id} />
           ))}
           </div>
 
