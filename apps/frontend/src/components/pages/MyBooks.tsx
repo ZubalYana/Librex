@@ -1,5 +1,64 @@
-export default function MyBooks(){
-    return(
-        <div>MyBooks</div>
-    )
+import { useState, useEffect } from 'react';
+import { apiFetch } from "../../api/apiFetch";
+import { useAlertStore } from '../../store/alertStore';
+import { Link } from 'react-router-dom';
+import BookCard from '../ui/BookCard';
+import { Button } from '../ui/Button';
+import { BookOpen, Plus } from 'lucide-react';
+
+export default function MyBooks() {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const setAlert = useAlertStore((state) => state.setAlert);
+
+  useEffect(() => {
+    setLoading(true);
+    apiFetch(`/userBooks/mine`, { method: 'GET' })
+      .then((res) => res.json())
+      .then((data) => setBooks(data.usersBooks))
+      .catch((err) => setAlert("error", err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-ink/50 font-sans text-sm">
+        Loading books...
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full h-full text-navy flex flex-col">
+      <h1 className="text-[20px] font-semibold">My books:</h1>
+
+      {books.length === 0 ? (
+        <div className="w-full flex-1 flex flex-col items-center justify-center text-center gap-3 px-6">
+          <div className="w-14 h-14 rounded-full bg-navy/10 flex items-center justify-center">
+            <BookOpen className="text-navy/40" size={26} strokeWidth={1.5} />
+          </div>
+          <p className="text-sm text-ink/60 max-w-[280px]">
+            Create your first book to start exchanging.
+          </p>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => {}}
+            className="mt-1"
+          >
+            <Plus size={18} /> Create a book
+          </Button>
+        </div>
+      ) : (
+        <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {books.map((book) => (
+            <Link to={`/app/books/${book.id}`} key={book.id}>
+              <BookCard book={book} />
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
