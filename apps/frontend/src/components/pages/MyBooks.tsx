@@ -27,7 +27,8 @@ export default function MyBooks() {
     setBooks((prevBooks) => prevBooks.filter((book) => book.id !== deletedBookId));
   };
 
-  const handleBookCreated = (newBook: Book) => {
+  const handleBookCreated = (data: any) => {
+    const newBook = data.book || data;
     setBooks((prevBooks) => [newBook, ...prevBooks]);
   };
 
