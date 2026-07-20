@@ -4,6 +4,8 @@ import { Trash2, Pencil } from "lucide-react";
 import { apiFetch } from "../../api/apiFetch";
 import { useAlertStore } from "../../store/alertStore";
 import ConfirmDialog from "./popups/ConfirmDialog";
+import BookControl from "./popups/BookControl";
+import { useNavigate } from "react-router-dom";
 
 import type { Book } from "../../types/Book";
 
@@ -16,8 +18,10 @@ interface BookCardProps {
 export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
   const [confirmationOpened, setConfirmationOpened] = useState(false);
+  const [editingMode, setEditingMode] = useState(false);
   const showImage = book.photoUrl && !imgFailed;
   const setAlert = useAlertStore((state) => state.setAlert);
+  const navigate = useNavigate();
 
   const onDeleteBook = () => {
     apiFetch(`/userBooks/${book.id}`, {
@@ -35,8 +39,10 @@ export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardP
       });
   };
 
+  const handleBookEdited = () => {};
+
   return (
-    <div className="w-[170px] h-[260px] md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">
+    <div onClick={() => navigate(`/app/books/${book.id}`)} className="w-[170px] h-[260px] md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">
       {showImage ? (
         <img
           src={book.photoUrl!}
@@ -73,6 +79,7 @@ export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardP
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              setEditingMode(true);
             }}
           >
             <Pencil size={15} />
@@ -102,6 +109,10 @@ export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardP
           }}
           onCancel={() => setConfirmationOpened(false)}
         />
+      )}
+
+      {editingMode && (
+        <BookControl onClose={()=>setEditingMode(false) } book={book} onEdited={handleBookEdited} mode='EDIT'/>
       )}
     </div>
   );

@@ -65,9 +65,7 @@ export default function MyBooks() {
         <div className='w-full h-full flex-1'>
         <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
-            <Link to={`/app/books/${book.id}`} key={book.id}>
               <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} />
-            </Link>
           ))}
           </div>
 
@@ -88,12 +86,7 @@ export default function MyBooks() {
       )}
 
       {bookCreation && (
-        <div 
-        className='w-full h-screen absolute top-0 left-0 bg-navy/40 backdrop-blur-sm flex justify-center items-center p-[20px] md:p-[40px]'
-        onClick={()=>setBookCreation(false)}
-        >
             <BookControl onClose={()=>setBookCreation(false) } onCreated={handleBookCreated} mode='CREATE'/>
-        </div>
       )}
     </div>
   );

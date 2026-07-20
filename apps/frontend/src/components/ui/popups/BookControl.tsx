@@ -13,6 +13,7 @@ interface BookControl{
     book?: Book;
     onClose: ()=>void;
     onCreated?: (newBook: Book) => void;
+    onEdited?: (newBook: Book) => void;
 }
 
 export default function BookControl({mode, book, onClose, onCreated}: BookControl){
@@ -65,6 +66,13 @@ export default function BookControl({mode, book, onClose, onCreated}: BookContro
     }, [])
     return(
         <div 
+        className='w-full h-screen fixed top-0 left-0 bg-navy/40 backdrop-blur-sm flex justify-center items-center p-[20px] md:p-[40px]'
+        onClick={(e)=>{
+            onClose()
+            e.stopPropagation()
+        }}
+        >
+        <div 
         className="w-full md:w-[600px] min-h-0 bg-parchment rounded-md p-[20px] md:p-[30px] relative"
         onClick={(e)=>{e.stopPropagation()}}
         >
@@ -89,6 +97,7 @@ export default function BookControl({mode, book, onClose, onCreated}: BookContro
                 </div>
             </div> :
             <div>EDIT A BOOK: {book.id}</div>}
+        </div>
         </div>
     )
 }
