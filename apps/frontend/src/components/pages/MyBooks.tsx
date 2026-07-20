@@ -89,7 +89,7 @@ export default function MyBooks() {
 
       {bookCreation && (
         <div 
-        className='w-full h-screen absolute top-0 left-0 bg-navy/70 flex justify-center items-center p-[20px] md:p-[40px]'
+        className='w-full h-screen absolute top-0 left-0 bg-navy/40 backdrop-blur-sm flex justify-center items-center p-[20px] md:p-[40px]'
         onClick={()=>setBookCreation(false)}
         >
             <BookControl onClose={()=>setBookCreation(false) } onCreated={handleBookCreated} mode='CREATE'/>
