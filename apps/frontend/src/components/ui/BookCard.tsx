@@ -1,3 +1,5 @@
+import { BookOpen } from "lucide-react";
+
 type Owner = {
   name: string;
   avatar: string;
@@ -8,31 +10,37 @@ type Book = {
   id: string;
   name: string;
   description: string;
-  photoUrl: string;
+  photoUrl: string | null;
   author: string;
   owner: Owner;
 };
 
-interface BookCardProps{
-    book: Book | null;
+interface BookCardProps {
+  book: Book;
 }
 
-export default function BookCard({book}: BookCardProps){
-    return(
-        <div className="w-[170x] h-[220px] md:w-[220px] md:h-[300px] relative">
-            <div className="w-full h-full">
-                <img 
-                src={book.photoUrl} 
-                alt={book.name} 
-                className="w-full h-full background-center absolute top-0 left-0 z-10" 
-                />
-                <div className="w-full h-full bg-navy/20 z-20"></div>
-            </div>
-            <div className="w-full h-[100px] absolute left-0 bottom-0 z-50">
-                <h3>{book.name}</h3>
-                <p>{book.description}</p>
-                <p>{book.author}</p>
-            </div>
+export default function BookCard({ book }: BookCardProps) {
+  return (
+    <div className="w-[170px] h-[260px] md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">
+      {book.photoUrl !== null ? (
+        <img
+          src={book.photoUrl}
+          alt={book.name}
+          className="w-full h-full object-cover object-center absolute inset-0 transition-transform duration-200 group-hover:scale-105"
+        />
+      ) : (
+        <div className="w-full h-full absolute inset-0 bg-navy/10 flex items-center justify-center">
+          <BookOpen className="text-navy/40" size={48} strokeWidth={1.5} />
         </div>
-    )
+      )}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/40 to-transparent" />
+
+      <div className="absolute left-0 bottom-0 w-full p-3 text-parchment">
+        <h3 className="font-serif text-sm font-semibold truncate">{book.name}</h3>
+        <p className="text-xs text-parchment/70 truncate mb-1">{book.author}</p>
+        <p className="text-xs text-parchment/80 line-clamp-2">{book.description}</p>
+      </div>
+    </div>
+  );
 }
