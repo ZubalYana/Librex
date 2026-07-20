@@ -12,7 +12,8 @@ export async function userPrivateProfile(req: Request, res: Response) {
     const userId = req.user?.userId;
 
     const user = await prisma.user.findUnique({
-      where: { id: String(userId) },
+      where: { id: String(userId) }, 
+      include: { books: true }
     });
 
     if (!user) {

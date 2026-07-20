@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 
-type User = {
+export type User = {
     id: string;
+    name: string;
     email: string;
     role: 'USER' | 'ADMIN';
     avatar: string | null;
