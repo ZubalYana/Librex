@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../../api/apiFetch";
 import { useAuthStore } from "../../store/authStore";
 import CombinedLogo from "../ui/CombinedLogo";
+import { useAlertStore } from "../../store/alertStore";
 
 export default function Register(){
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const setAlert = useAlertStore((state)=>(state.setAlert))
 
     const disabled = !name || !email || !password;
     const navigate = useNavigate();
@@ -30,11 +32,11 @@ export default function Register(){
         })
         .then((res)=>res.json())
         .then((data)=>{
-            console.log(data);
             useAuthStore.getState().setAuth(data.user, data.token);
-            setLoading(false);
             navigate('/app/books');
-        }).catch((err)=>console.error(err));
+        })
+        .catch((err)=>setAlert("error", err.message))
+        .finally(()=>setLoading(false))
     }
 
     return(

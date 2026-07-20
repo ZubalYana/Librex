@@ -12,9 +12,12 @@ import BooksList from "./components/pages/BooksList";
 import MyBooks from "./components/pages/MyBooks";
 import Profile from "./components/pages/Profile";
 
+import { AlertBanner } from "./components/ui/AlertBanner";
+
 function App() {
   return (
     <BrowserRouter>
+    <AlertBanner/>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
