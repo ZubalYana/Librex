@@ -3,6 +3,7 @@ import type { Book } from '../../types/Book';
 import { apiFetch } from '../../api/apiFetch';
 import { useParams, Link } from 'react-router-dom';
 import { useAlertStore } from '../../store/alertStore';
+import { useAuthStore } from '../../store/authStore';
 import { ArrowLeft, User, RefreshCw, BookOpen } from 'lucide-react';
 import { Button } from '../ui/Button';
 
@@ -25,6 +26,7 @@ export default function BookDetails() {
       .catch((err) => setAlert("error", err.message))
       .finally(() => setLoading(false));
   }, [bookId]);
+  const userId = useAuthStore((state)=>(state.user.id))
 
   const onRequestExchange = () => {
     if (!book) return;
@@ -33,7 +35,11 @@ export default function BookDetails() {
       .then((res) => res.json())
       .then(() => setAlert("success", 'An email has been sent to the book owner.'))
       .catch((err) => {
-        setAlert("error", 'An error occurred when requesting exchange.');
+        if(book.owner.id === userId){
+            setAlert("error", 'You cannot request an exchange on your own book.');
+        }else{
+            setAlert("error", 'An error occurred when requesting exchange.');
+        }
         console.error(err);
       })
       .finally(() => setLoading(false));
