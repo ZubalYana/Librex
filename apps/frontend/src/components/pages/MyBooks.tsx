@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 import BookCard from '../ui/BookCard';
 import { Button } from '../ui/Button';
 import { BookOpen, Plus } from 'lucide-react';
+import BookControl from '../ui/popups/BookControl';
 
 export default function MyBooks() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [bookCreation, setBookCreation] = useState(false);
 
   const setAlert = useAlertStore((state) => state.setAlert);
 
@@ -44,7 +46,7 @@ export default function MyBooks() {
           <Button
             variant="primary"
             size="md"
-            onClick={() => {}}
+            onClick={() => {setBookCreation(true)}}
             className="mt-1"
           >
             <Plus size={18} /> Create a book
@@ -57,6 +59,15 @@ export default function MyBooks() {
               <BookCard book={book} />
             </Link>
           ))}
+        </div>
+      )}
+
+      {bookCreation && (
+        <div 
+        className='w-full h-screen absolute top-0 left-0 bg-navy/70 flex justify-center items-center p-[20px] md:p-[40px]'
+        onClick={()=>setBookCreation(false)}
+        >
+            <BookControl onClose={()=>setBookCreation(false) } mode='CREATE'/>
         </div>
       )}
     </div>
