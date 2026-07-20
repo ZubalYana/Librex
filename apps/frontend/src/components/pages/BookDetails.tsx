@@ -3,7 +3,8 @@ import type { Book } from '../../types/Book';
 import { apiFetch } from '../../api/apiFetch';
 import { useParams } from 'react-router-dom';
 import { useAlertStore } from '../../store/alertStore';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft, User, RefreshCw } from 'lucide-react';
+import { Button } from '../ui/Button';
 
 export default function BookDetails(){
     const [book, setBook] = useState<Book | null>(null);
@@ -24,6 +25,23 @@ export default function BookDetails(){
         .catch((err)=>{setAlert("error", err.message)})
         .finally(()=>setLoading(false));
     }, []);
+
+    const onRequestExchange = ()=>{
+        setLoading(true);
+        apiFetch(`/exchange/${book.id}/request-exchange`, {
+            method: 'POST'
+        })
+        .then((res)=>res.json())
+        .then((data)=>{
+            console.log(data);
+            setAlert("success", 'An email has been sent to the book owner.')
+        })
+        .catch((err)=>{
+            setAlert("error", 'An error occured when requesting exchange.');
+            console.error(err);
+        })
+        .finally(()=>setLoading(false));
+    }
 
     if(loading){
         return <div>Loading book details...</div>
@@ -51,6 +69,11 @@ export default function BookDetails(){
                             <p>{book.owner.name}</p>
                         </div>
                     </div>
+                    <Button 
+                    variant='primary' 
+                    size='lg'
+                    onClick={()=>onRequestExchange()}
+                    ><RefreshCw/> Request exchange</Button>
                 </div>
             </div>
         </div>
