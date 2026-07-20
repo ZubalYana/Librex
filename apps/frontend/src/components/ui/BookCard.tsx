@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BookOpen } from "lucide-react";
 
 type Owner = {
@@ -20,12 +21,16 @@ interface BookCardProps {
 }
 
 export default function BookCard({ book }: BookCardProps) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const showImage = book.photoUrl && !imgFailed;
+
   return (
     <div className="w-[170px] h-[260px] md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">
-      {book.photoUrl !== null ? (
+      {showImage ? (
         <img
-          src={book.photoUrl}
+          src={book.photoUrl!}
           alt={book.name}
+          onError={() => setImgFailed(true)}
           className="w-full h-full object-cover object-center absolute inset-0 transition-transform duration-200 group-hover:scale-105"
         />
       ) : (
