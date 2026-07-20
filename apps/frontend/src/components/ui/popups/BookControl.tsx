@@ -6,6 +6,7 @@ import { Input } from "../Input";
 import {Textarea} from "../TextArea"
 import { Button } from "../Button";
 import BookCoverUploader from "../BookCoverUploader";
+import { useAlertStore } from "../../../store/alertStore";
 
 interface BookControl{
     mode: 'CREATE' | 'EDIT';
@@ -18,6 +19,35 @@ export default function BookControl({mode, book, onClose}: BookControl){
     const [description, setDescription] = useState('');
     const [photoUrl, setPhotoUrl] = useState<File | null>(null);
     const [author, setAuthor] = useState('');
+    const [loading, setLoading] = useState(false);
+    const setAlert = useAlertStore((state)=>(state.setAlert))
+
+    const onCreateBook = ()=>{
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("name", name);
+        if(description) formData.append("description", description);
+        formData.append("author", author);
+
+        if(photoUrl) formData.append("photo", photoUrl)
+
+        apiFetch('/userBooks', {
+            method: 'POST',
+            body: formData
+        })
+        .then((res)=>res.json())
+        .then((data)=>{
+            console.log(data);
+            onClose();
+            setName("");
+            setDescription("");
+            setPhotoUrl(null);
+            setAuthor("")
+            setAlert("success", "Created successfully")
+        })
+        .catch((err)=>setAlert("error", err.message))
+        .finally(()=>setLoading(false));
+    }
     return(
         <div 
         className="w-full md:w-[600px] min-h-0 bg-parchment rounded-md p-[20px] md:p-[30px] relative"
@@ -39,7 +69,7 @@ export default function BookControl({mode, book, onClose}: BookControl){
                 </div>
                 <div className="w-full flex justify-center mt-6">
                     <div className="w-full md:w-[300px]">
-                <Button variant="primary" size="lg" className="w-full">Create</Button>
+                <Button variant="primary" isLoading={loading} size="lg" className="w-full" onClick={()=>onCreateBook()}>Create</Button>
                 </div>
                 </div>
             </div> :

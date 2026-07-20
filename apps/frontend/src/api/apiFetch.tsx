@@ -5,12 +5,13 @@ export const apiFetch = async(
     options: RequestInit = {}
 ): Promise<Response> => {
     const token = localStorage.getItem("token");
+    const formData = options.body instanceof FormData;
 
     try{
         const res = await fetch(`${BASE_URL}${url}`, {
             method: options.method,
             headers: {
-                'Content-type': 'application/json',
+                ...(!formData && {'Content-type': 'application/json'}),
                 'Authorization': `Bearer ${token}`
             },
             body: options.body

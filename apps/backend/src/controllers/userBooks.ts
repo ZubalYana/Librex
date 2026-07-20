@@ -32,6 +32,7 @@ export async function createBook(req: Request, res: Response) {
     if (req.file?.path && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
+    console.log(err)
     const message = err instanceof Error ? err.message : 'Unknown error while creating your book';
     res.status(500).json({ message: message });
   }

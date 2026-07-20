@@ -53,12 +53,28 @@ export default function MyBooks() {
           </Button>
         </div>
       ) : (
+        <div className='w-full h-full flex-1'>
         <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
             <Link to={`/app/books/${book.id}`} key={book.id}>
               <BookCard book={book} />
             </Link>
           ))}
+          </div>
+
+          <button
+            onClick={() => {setBookCreation(true)}}
+            className="mt-1 w-[50px] h-[50px] rounded-full bg-accent 
+            flex items-center justify-center cursor-pointer absolute bottom-[20px] right-[20px] 
+            md:bottom-[40px] md:right-[40px] text-parchment
+            hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] 
+            focus-visible:outline-none focus-visible:ring-2
+            focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-parchment
+            shadow-sm hover:bg-[#c96a4f] hover:shadow-md
+            active:bg-[#b85f46] active:shadow-sm"
+          >
+            <Plus size={24} />
+          </button>
         </div>
       )}
 
