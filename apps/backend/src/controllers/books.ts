@@ -44,7 +44,7 @@ export async function getBookDetails(req: Request, res: Response){
         const prisma = getPrisma();
         const bookId = req.params.bookId;
         
-        const book = await prisma.book.findUnique({where: {id: String(bookId)}});
+        const book = await prisma.book.findUnique({where: {id: String(bookId)}, include: {owner: true}});
 
         if(!book){
             res.status(404).json({message: 'Book not found'});
