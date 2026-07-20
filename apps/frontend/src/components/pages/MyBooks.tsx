@@ -50,7 +50,7 @@ export default function MyBooks() {
 
   return (
     <div className="w-full h-full text-navy flex flex-col">
-      <h1 className="text-[20px] font-semibold">My books:</h1>
+      <h1 className="text-[20px] md:text-[24px] font-semibold">My books:</h1>
 
       {books.length === 0 ? (
         <div className="w-full flex-1 flex flex-col items-center justify-center text-center gap-3 px-6">
@@ -71,7 +71,7 @@ export default function MyBooks() {
         </div>
       ) : (
         <div className='w-full h-full flex-1'>
-        <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="w-full mt-4 md:mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
               <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} onEdited={handleBookEdited} key={book.id} />
           ))}
@@ -79,14 +79,14 @@ export default function MyBooks() {
 
           <button
             onClick={() => {setBookCreation(true)}}
-            className="mt-1 w-[55px] h-[55px] rounded-full bg-accent 
-            flex items-center justify-center cursor-pointer absolute bottom-[20px] right-[20px] 
+            className="mt-1 w-[60px] h-[60px] rounded-full bg-accent 
+            flex items-center justify-center cursor-pointer fixed bottom-[20px] right-[20px] 
             md:bottom-[40px] md:right-[40px] text-parchment
             hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] 
             focus-visible:outline-none focus-visible:ring-2
             focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-parchment
             shadow-sm hover:bg-[#c96a4f] hover:shadow-md
-            active:bg-[#b85f46] active:shadow-sm"
+            active:bg-[#b85f46] active:shadow-sm z-100"
           >
             <Plus size={24} />
           </button>

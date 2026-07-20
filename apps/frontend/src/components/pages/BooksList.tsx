@@ -36,12 +36,12 @@ export default function BooksList() {
 
   return (
     <div className="w-full text-navy">
-      <h1 className="text-[20px] font-semibold">Community books:</h1>
+      <h1 className="text-[20px] md:text-[24px] font-semibold">Community books:</h1>
 
       {books.length === 0 ? (
         <div className="mt-4">No books found</div>
       ) : (
-        <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="w-full mt-4 md:mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
             <a href={`/app/books/${book.id}`} key={book.id} >
             <BookCard book={book} />
@@ -51,7 +51,7 @@ export default function BooksList() {
       )}
 
       {pagination.totalPages > 1 && (
-        <div className="w-full flex items-center justify-center gap-3 mt-6">
+        <div className="w-full flex items-center justify-center gap-3 mt-10">
           <Button
             variant="secondary"
             size="sm"
