@@ -7,6 +7,7 @@ import { Textarea } from "../TextArea";
 import { Button } from "../Button";
 import BookCoverUploader from "../BookCoverUploader";
 import { useAlertStore } from "../../../store/alertStore";
+import { createPortal } from "react-dom";
 
 interface BookControl {
   mode: "CREATE" | "EDIT";
@@ -100,7 +101,7 @@ export default function BookControl({
       .catch((err) => setAlert("error", err.message))
       .finally(() => setLoading(false));
   };
-  return (
+  return createPortal(
     <div
       className="w-full h-screen fixed z-50 top-0 left-0 bg-navy/40 backdrop-blur-sm flex justify-center items-center p-[20px] md:p-[40px]"
       onClick={(e) => {
@@ -109,7 +110,7 @@ export default function BookControl({
       }}
     >
       <div
-        className="w-full md:w-[600px] min-h-0 bg-parchment rounded-md p-[20px] md:p-[30px] relative"
+        className="w-full md:w-[600px] min-h-0 bg-parchment rounded-md p-[20px] md:p-[30px] relative z-50"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -208,6 +209,7 @@ export default function BookControl({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

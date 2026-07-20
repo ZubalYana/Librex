@@ -86,7 +86,7 @@ export default function MyBooks() {
             focus-visible:outline-none focus-visible:ring-2
             focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-parchment
             shadow-sm hover:bg-[#c96a4f] hover:shadow-md
-            active:bg-[#b85f46] active:shadow-sm z-100"
+            active:bg-[#b85f46] active:shadow-sm z-50"
           >
             <Plus size={24} />
           </button>
