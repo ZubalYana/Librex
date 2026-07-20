@@ -42,7 +42,7 @@ export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardP
   const handleBookEdited = () => {};
 
   return (
-    <div onClick={() => navigate(`/app/books/${book.id}`)} className="w-[170px] h-[260px] md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">
+    <div onClick={() => navigate(`/app/books/${book.id}`)} className="w-[170px] h-[260px] z-10 md:w-[260px] md:h-[340px] relative rounded-lg overflow-hidden shadow-sm group cursor-pointer">
       {showImage ? (
         <img
           src={book.photoUrl!}

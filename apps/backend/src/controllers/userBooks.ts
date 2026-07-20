@@ -64,8 +64,10 @@ export async function getUsersBooks(req: Request, res: Response){
 
 export async function editUsersBook(req: Request, res: Response){
     try{
+        console.log('Req.body:', req.body)
         const prisma = getPrisma();
-        const { name, description, photoUrl, author } = req.body;
+        const cloudinary = getCloudinary();
+        const { name, description, author } = req.body;
         const ownerId = req.user?.userId;
         const bookId = req.params.bookId;
 
@@ -81,12 +83,27 @@ export async function editUsersBook(req: Request, res: Response){
             return;
         }
 
-        const updatedBook = await prisma.book.update({where: {id: String(bookId)}, data: {name, description, photoUrl, author}});
+        let updatedPhotoUrl = book.photoUrl;
+
+        if (req.file) {
+            const uploadResult = await cloudinary.uploader.upload(req.file.path, { 
+                folder: 'librex-bookPhotos',
+                format: 'webp'
+            });
+            fs.unlinkSync(req.file.path); 
+            updatedPhotoUrl = uploadResult.secure_url;
+        }
+
+        const updatedBook = await prisma.book.update({where: {id: String(bookId)}, data: {name, description, photoUrl: updatedPhotoUrl, author}});
 
         res.status(200).json({updatedBook});
     }catch(err){
+        if (req.file?.path && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
         const message = err instanceof Error? err.message : 'Unknown error while editing your book';
         res.status(500).json({message: message});
+        console.log(err)
     }
 }
 

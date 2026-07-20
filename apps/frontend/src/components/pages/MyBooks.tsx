@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiFetch } from "../../api/apiFetch";
 import { useAlertStore } from '../../store/alertStore';
-import { Link } from 'react-router-dom';
 import BookCard from '../ui/BookCard';
 import { Button } from '../ui/Button';
 import { BookOpen, Plus } from 'lucide-react';
@@ -30,6 +29,14 @@ export default function MyBooks() {
 
   const handleBookCreated = (newBook: Book) => {
     setBooks((prevBooks) => [newBook, ...prevBooks]);
+  };
+
+  const handleBookEdited = (updatedBook: Book) => {
+    setBooks((prevBooks) => 
+        prevBooks.map((book) => 
+            book.id === updatedBook.id ? updatedBook : book
+        )
+    );
   };
 
   if (loading) {
@@ -65,7 +72,7 @@ export default function MyBooks() {
         <div className='w-full h-full flex-1'>
         <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
-              <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} />
+              <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} key={book.id} />
           ))}
           </div>
 
@@ -86,7 +93,7 @@ export default function MyBooks() {
       )}
 
       {bookCreation && (
-            <BookControl onClose={()=>setBookCreation(false) } onCreated={handleBookCreated} mode='CREATE'/>
+            <BookControl onClose={()=>setBookCreation(false) } onCreated={handleBookCreated} onEdited={handleBookEdited} mode='CREATE'/>
       )}
     </div>
   );

@@ -4,22 +4,23 @@ import { cn } from "./Cn";
 
 interface BookCoverUploaderProps {
   value?: File | null;
+  url?: string | null;
   onChange: (file: File | null) => void;
   error?: string;
 }
 
-export default function BookCoverUploader({ value, onChange, error }: BookCoverUploaderProps) {
+export default function BookCoverUploader({ value, url, onChange, error }: BookCoverUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!value) {
-      setPreviewUrl(null);
+      setPreviewUrl(url);
       return;
     }
-    const url = URL.createObjectURL(value);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
+    const createdUrl = URL.createObjectURL(value);
+    setPreviewUrl(createdUrl);
+    return () => URL.revokeObjectURL(createdUrl);
   }, [value]);
 
   const handleFileSelect = (file: File | undefined) => {
