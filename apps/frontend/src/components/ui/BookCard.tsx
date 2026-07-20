@@ -10,9 +10,10 @@ import type { Book } from "../../types/Book";
 interface BookCardProps {
   book: Book;
   openedInMyBooks?: boolean;
+  onDeleted?: (bookId: string)=>void;
 }
 
-export default function BookCard({ book, openedInMyBooks }: BookCardProps) {
+export default function BookCard({ book, openedInMyBooks, onDeleted }: BookCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
   const [confirmationOpened, setConfirmationOpened] = useState(false);
   const showImage = book.photoUrl && !imgFailed;
@@ -26,6 +27,7 @@ export default function BookCard({ book, openedInMyBooks }: BookCardProps) {
       .then((data) => {
         console.log(data);
         setAlert("success", "Deleted successfully");
+        onDeleted(book.id);
       })
       .catch((err) => {
         console.error(err);

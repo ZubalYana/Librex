@@ -12,9 +12,10 @@ interface BookControl{
     mode: 'CREATE' | 'EDIT';
     book?: Book;
     onClose: ()=>void;
+    onCreated?: (newBook: Book) => void;
 }
 
-export default function BookControl({mode, book, onClose}: BookControl){
+export default function BookControl({mode, book, onClose, onCreated}: BookControl){
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [photoUrl, setPhotoUrl] = useState<File | null>(null);
@@ -43,6 +44,7 @@ export default function BookControl({mode, book, onClose}: BookControl){
             setDescription("");
             setPhotoUrl(null);
             setAuthor("")
+            onCreated(data)
             setAlert("success", "Created successfully")
         })
         .catch((err)=>setAlert("error", err.message))

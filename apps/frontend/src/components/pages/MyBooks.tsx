@@ -6,6 +6,7 @@ import BookCard from '../ui/BookCard';
 import { Button } from '../ui/Button';
 import { BookOpen, Plus } from 'lucide-react';
 import BookControl from '../ui/popups/BookControl';
+import type { Book } from '../../types/Book';
 
 export default function MyBooks() {
   const [books, setBooks] = useState([]);
@@ -22,6 +23,14 @@ export default function MyBooks() {
       .catch((err) => setAlert("error", err.message))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleBookDeleted = (deletedBookId: string) => {
+    setBooks((prevBooks) => prevBooks.filter((book) => book.id !== deletedBookId));
+  };
+
+  const handleBookCreated = (newBook: Book) => {
+    setBooks((prevBooks) => [newBook, ...prevBooks]);
+  };
 
   if (loading) {
     return (
@@ -57,7 +66,7 @@ export default function MyBooks() {
         <div className="w-full mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
           {books.map((book) => (
             <Link to={`/app/books/${book.id}`} key={book.id}>
-              <BookCard book={book} openedInMyBooks={true} />
+              <BookCard book={book} openedInMyBooks={true} onDeleted={handleBookDeleted} />
             </Link>
           ))}
           </div>
@@ -83,7 +92,7 @@ export default function MyBooks() {
         className='w-full h-screen absolute top-0 left-0 bg-navy/70 flex justify-center items-center p-[20px] md:p-[40px]'
         onClick={()=>setBookCreation(false)}
         >
-            <BookControl onClose={()=>setBookCreation(false) } mode='CREATE'/>
+            <BookControl onClose={()=>setBookCreation(false) } onCreated={handleBookCreated} mode='CREATE'/>
         </div>
       )}
     </div>
