@@ -19,7 +19,7 @@ export default function BookCard({ book, openedInMyBooks }: BookCardProps) {
   const setAlert = useAlertStore((state) => state.setAlert);
 
   const onDeleteBook = () => {
-    apiFetch(`/usersBook/${book.id}`, {
+    apiFetch(`/userBooks/${book.id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

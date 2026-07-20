@@ -48,6 +48,19 @@ export default function BookControl({mode, book, onClose}: BookControl){
         .catch((err)=>setAlert("error", err.message))
         .finally(()=>setLoading(false));
     }
+
+    const renderBookInfo = ()=>{
+        if(mode==="EDIT"){
+            setName(book.name);
+        setDescription(book.description);
+        // setPhotoUrl(book.photoUrl);
+        setAuthor(book.author);
+        }
+    }
+
+    useEffect(()=>{
+        renderBookInfo()
+    }, [])
     return(
         <div 
         className="w-full md:w-[600px] min-h-0 bg-parchment rounded-md p-[20px] md:p-[30px] relative"

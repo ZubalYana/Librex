@@ -93,7 +93,7 @@ export async function editUsersBook(req: Request, res: Response){
 export async function deleteUsersBook(req: Request, res: Response){
     try{
         const prisma = getPrisma();
-        const bookId = req.params.id;
+        const bookId = req.params.bookId;
         const ownerId = req.user?.userId;
         const book = await prisma.book.findUnique({where: {id: String(bookId)}});
         if(!book){
@@ -112,5 +112,6 @@ export async function deleteUsersBook(req: Request, res: Response){
     }catch(err){
         const message = err instanceof Error? err.message : 'Unknown error while deleting your book';
         res.status(500).json({message: message});
+        console.log(err)
     }
 }
