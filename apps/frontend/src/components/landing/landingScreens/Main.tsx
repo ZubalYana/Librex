@@ -6,7 +6,7 @@ export default function Main() {
   const navigate = useNavigate();
 
   return (
-    <div className="h-screen flex flex-col p-[20px] lg:px-[40px]">
+    <div className="min-h-screen flex flex-col p-[20px] lg:px-[40px]">
       <CombinedLogo />
 
       <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-x-16 gap-y-8 mt-6 md:mt-0">
