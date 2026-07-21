@@ -15,13 +15,13 @@ export default function BookCoverUploader({ value, url, onChange, error }: BookC
 
   useEffect(() => {
     if (!value) {
-      setPreviewUrl(url);
+      setPreviewUrl(url || null);
       return;
     }
     const createdUrl = URL.createObjectURL(value);
     setPreviewUrl(createdUrl);
     return () => URL.revokeObjectURL(createdUrl);
-  }, [value]);
+  }, [value, url]);
 
   const handleFileSelect = (file: File | undefined) => {
     if (!file) return;

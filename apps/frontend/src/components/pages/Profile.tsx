@@ -1,18 +1,35 @@
 import { useAuthStore } from '../../store/authStore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { LogOut, Pencil } from 'lucide-react';
 import ProfileEditing from '../ui/popups/ProfileEditing';
+import type { User } from '../../store/authStore';
+import { apiFetch } from '../../api/apiFetch';
 
 
 export default function Profile(){
     const [editingMode, setEditingMode] = useState(false);
-    const user = useAuthStore((state)=>(state.user))
+    // const user = useAuthStore((state)=>(state.user))
+    const [user, setUser]= useState<User | null>(null)
     const logOut = useAuthStore((state)=>(state.logout));
-    console.log(user)
 
     const onEdited = (data: any)=>{
-        console.log(data);
+        console.log('Data:',data);
+    }
+
+    useEffect(()=>{
+        apiFetch('/user/profile', {
+            method: 'GET'
+        })
+        .then((res)=>res.json())
+        .then((data)=>{
+            setUser(data.userWithoutPassword)
+            console.log(data)
+        })
+    }, [])
+
+    if(!user){
+        return <div>Loading...</div>
     }
 
     return(
