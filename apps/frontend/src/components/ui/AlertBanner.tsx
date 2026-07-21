@@ -12,7 +12,7 @@ const ICONS: Record<"success" | "error" | "info", LucideIcon> = {
 const STYLES: Record<"success" | "error" | "info", string> = {
   success: "bg-emerald-50 text-emerald-700 border-emerald-200",
   error: "bg-red-50 text-red-700 border-red-200",
-  info: "bg-navy/5 text-navy border-navy/20",
+  info: "bg-[#c4c9d6d9] text-navy border-navy/20",
 };
 
 export function AlertBanner() {

@@ -14,6 +14,8 @@ import BooksList from "./components/pages/BooksList";
 import MyBooks from "./components/pages/MyBooks";
 import Profile from "./components/pages/Profile";
 
+import ChangeEmailConfirm from "./components/pages/ChangeEmailConfirm";
+
 import { AlertBanner } from "./components/ui/AlertBanner";
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/change-email" element={<ChangeEmailConfirm/>}/>
 
         <Route path="/app" element={<ProtectedRoute />}>
           <Route path="/app/books" element={<HeaderContainer><BooksList /></HeaderContainer>} />
