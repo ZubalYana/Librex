@@ -61,20 +61,17 @@ export default function BookCard({ book, openedInMyBooks, onDeleted, onEdited }:
         </div>
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/40 to-transparent" />
-      {openedInMyBooks && (
-        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-navy/70 to-transparent" />
-      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/10 to-transparent" />
 
-      <div className="absolute left-0 bottom-0 w-full p-3 text-parchment">
-        <h3 className="font-serif text-sm font-semibold truncate">
-          {book.name}
-        </h3>
-        <p className="text-xs text-parchment/70 truncate mb-1">{book.author}</p>
-        <p className="text-xs text-parchment/80 line-clamp-2">
-          {book.description}
-        </p>
-      </div>
+<div className="absolute left-0 bottom-0 w-full p-3 text-parchment">
+  <h3 className="font-serif text-sm font-semibold truncate">
+    {book.name}
+  </h3>
+  <p className="text-xs text-parchment/70 truncate mb-1">{book.author}</p>
+  <p className="text-xs text-parchment/80 line-clamp-2">
+    {book.description}
+  </p>
+</div>
 
       {openedInMyBooks && (
         <div className="absolute top-2 right-2 flex gap-x-2">

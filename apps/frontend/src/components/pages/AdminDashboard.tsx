@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import CombinedLogo from "../ui/CombinedLogo";
 import UsersList from "../ui/UsersList";
+import BooksListAdmin from "../ui/BooksListAdmin";
 
 export default function AdminDashboard() {
   return (
@@ -13,13 +14,20 @@ export default function AdminDashboard() {
           <CombinedLogo admin={true} />
         </NavLink>
       </div>
-      <div className="w-full justify-between gap-x-6">
+      <div className="w-full flex justify-between gap-x-6 pb-10">
+        <div className="w-[50%]">
+          <h1 className="text-[20px] md:text-[24px] font-semibold mb-4 md:mb-6">
+            Books:
+          </h1>
+          <BooksListAdmin />
+        </div>
         <div className="w-[50%]">
           <h1 className="text-[20px] md:text-[24px] font-semibold mb-4 md:mb-6">
             Users:
           </h1>
           <UsersList />
         </div>
+        
       </div>
     </div>
   );

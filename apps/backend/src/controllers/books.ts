@@ -20,7 +20,9 @@ export async function getAllBooks(req: Request, res: Response){
         const skip = ( page - 1 ) * booksLimit;
     
         const [books, totalCount] = await Promise.all([ 
-            prisma.book.findMany({where, orderBy: {name: order}, skip, take: booksLimit}),
+            prisma.book.findMany({include: {
+          owner: { select: { id: true, name: true, email: true } },
+        },where, orderBy: {name: order}, skip, take: booksLimit}),
             prisma.book.count({where})
             ])
 
