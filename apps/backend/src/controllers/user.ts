@@ -58,7 +58,7 @@ export async function forgotPassword(req: Request, res: Response) {
         data: { resetTokenHash: tokenHash, resetTokenExpiry: expiry },
       });
 
-      const resetLink = `https://localhost:5173/reset-password?token=${rawToken}&email=${email}`;
+      const resetLink = `http://localhost:5173/reset-password?token=${rawToken}&email=${email}`;
 
       await resend.emails.send({
         from: "Librex <noreply@librex.pictureboooks.homes>",
