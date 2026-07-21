@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { SentRequest } from '../types/Request';
 
 export type User = {
     id: string;
@@ -6,7 +7,8 @@ export type User = {
     email: string;
     role: 'USER' | 'ADMIN';
     avatar: string | null;
-    books?: []
+    books?: [];
+    sentRequests?: SentRequest[]
 };
 
 type AuthState = {

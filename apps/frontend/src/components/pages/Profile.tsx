@@ -1,7 +1,7 @@
 import { useAuthStore } from '../../store/authStore';
 import { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
-import { LogOut, Pencil } from 'lucide-react';
+import { LogOut, Pencil, Clock, Book as BookIcon } from 'lucide-react';
 import ProfileEditing from '../ui/popups/ProfileEditing';
 import type { User } from '../../store/authStore';
 import { apiFetch } from '../../api/apiFetch';
@@ -26,7 +26,7 @@ export default function Profile() {
   }, []);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div className="w-full flex justify-center mt-20 text-ink/50">Loading profile...</div>;
   }
 
   const initials = user.name
@@ -37,10 +37,10 @@ export default function Profile() {
     .toUpperCase();
 
   return (
-    <div className="w-full text-navy">
+    <div className="w-full text-navy pb-12">
       <h1 className="text-[20px] md:text-[24px] font-semibold">My Profile:</h1>
 
-      <div className="flex items-center mt-4">
+      <div className="flex items-center mt-6">
         {user.avatar ? (
           <img
             src={user.avatar}
@@ -52,22 +52,74 @@ export default function Profile() {
             {initials}
           </div>
         )}
-        <div className="ml-4">
+        <div className="ml-5">
           <h2 className="text-[18px] font-semibold">{user.name}</h2>
-          <p className="text-navy/70">{user.email}</p>
-          <div className="flex items-center gap-x-2 mt-1.5">
-            <span className={`${user.role === 'ADMIN' ? 'bg-accent/40' : 'bg-navy/10'} px-2 py-0.5 rounded-full text-[11px] font-medium lowercase`}>
+          <p className="text-navy/70 text-sm">{user.email}</p>
+          <div className="flex items-center gap-x-2 mt-2">
+            <span className={`${user.role === 'ADMIN' ? 'bg-accent/40' : 'bg-navy/10'} px-2.5 py-0.5 rounded-full text-[11px] font-semibold lowercase tracking-wide`}>
               {user.role}
             </span>
-            <span className="text-[13px] text-navy/60">{user.books.length ?? 0} books</span>
+            <span className="text-[13px] text-navy/60">{user.books?.length ?? 0} books</span>
           </div>
         </div>
       </div>
 
-      <div className='flex gap-x-4'>
-        <Button variant='secondary' onClick={() => logOut()} className='mt-6'><LogOut /> Log out</Button>
-        <Button variant='primary' onClick={() => setEditingMode(true)} className='mt-6'><Pencil /> Edit</Button>
+      <div className='flex gap-x-4 mt-8'>
+        <Button variant='primary' onClick={() => setEditingMode(true)}>
+          <Pencil size={16} /> Edit Profile
+        </Button>
+        <Button variant='secondary' onClick={() => logOut()}>
+          <LogOut size={16} /> Log out
+        </Button>
       </div>
+
+      <hr className="my-10 border-navy/10" />
+
+      <h3 className="text-[18px] font-semibold mb-4">Sent Exchange Requests</h3>
+      
+      {!user.sentRequests || user.sentRequests.length === 0 ? (
+        <div className="w-full py-8 rounded-lg bg-navy/5 border border-navy/10 text-center flex flex-col items-center justify-center">
+          <BookIcon className="text-navy/20 mb-2" size={32} />
+          <p className="text-sm text-navy/60">You haven't requested any exchanges yet.</p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-y-3">
+          {user.sentRequests.map((request) => (
+            <div 
+              key={request.id} 
+              className="flex items-center justify-between p-4 rounded-lg border border-navy/10 bg-white/50 hover:bg-white transition-colors"
+            >
+              <div className="flex items-center gap-x-4">
+                <div className="w-12 h-16 bg-navy/10 rounded overflow-hidden flex-shrink-0">
+                  {request.requestedBook?.photoUrl ? (
+                    <img src={request.requestedBook.photoUrl} alt="cover" className="w-full h-full object-cover" />
+                  ) : (
+                    <BookIcon className="w-full h-full p-3 text-navy/30" />
+                  )}
+                </div>
+                
+                <div className="flex flex-col">
+                  <span className="font-medium text-sm">
+                    {request.requestedBook?.name || `Book ID: ${request.requestedBookId}`}
+                  </span>
+                  <span className="text-xs text-navy/60">
+                    {request.requestedBook?.author || 'Unknown Author'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-x-1.5 text-xs text-navy/50 font-medium">
+                <Clock size={14} />
+                {new Date(request.createdAt).toLocaleDateString(undefined, { 
+                  month: 'short', 
+                  day: 'numeric', 
+                  year: 'numeric' 
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {editingMode && (
         <ProfileEditing user={user} onClose={() => setEditingMode(false)} onEdited={onEdited} />
