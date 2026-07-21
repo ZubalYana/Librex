@@ -6,7 +6,7 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { apiFetch } from "../../../api/apiFetch";
 import { useAlertStore } from "../../../store/alertStore";
-import { useAuthStore } from "../../../store/authStore";
+// import { useAuthStore } from "../../../store/authStore";
 
 interface ProfileEditingProps {
   user: User;
@@ -26,7 +26,7 @@ export default function ProfileEditing({
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(true);
     const setAlert = useAlertStore((state)=>(state.setAlert));
-    const setUser = useAuthStore((state)=>(state.setAuth))
+    // const setUser = useAuthStore((state)=>(state.setAuth))
 
     const initialLoad = ()=>{
         setName(user.name);
@@ -49,13 +49,14 @@ export default function ProfileEditing({
 
         if(avatarChanged){
             apiFetch('/user/upload-avatar', {
-                method: 'POST',
+                method: 'PUT',
                 body: formData
             })
             .then((res)=>res.json())
             .then((data)=>{
                 console.log(data);
                 setAlert('success', 'Avatar changed successfully');
+                onClose();
                 onEdited(data);
             })
             .catch((err)=>{
