@@ -13,7 +13,7 @@ export async function userPrivateProfile(req: Request, res: Response) {
 
     const user = await prisma.user.findUnique({
       where: { id: String(userId) }, 
-      include: { books: true }
+      include: { books: true, sentRequests: true }
     });
 
     if (!user) {

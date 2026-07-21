@@ -16,6 +16,16 @@ enum Role{
   ADMIN
 }
 
+
+model Request{
+  id String @id @default(uuid())
+  requester User @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  requesterId String
+  requestedBook Book @relation(fields: [requestedBookId], references: [id], onDelete: Cascade)
+  requestedBookId String
+  createdAt DateTime @default(now())
+}
+
 model User{
   id  String  @id @default(uuid())
   name String
@@ -27,6 +37,7 @@ model User{
   updatedAt DateTime @updatedAt
 
   books Book[]
+  sentRequests Request[]
 
   resetTokenHash String?
   resetTokenExpiry DateTime?
@@ -46,4 +57,5 @@ model Book{
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String
+  requestsReceived Request[]
 }

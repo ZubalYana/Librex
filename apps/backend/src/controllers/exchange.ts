@@ -22,7 +22,7 @@ export async function requestExchange(req: Request, res: Response) {
     if (bookForExchange.ownerId === userId) {
       res
         .status(400)
-        .json({ message: "You cannot quire an exchange for your own book" });
+        .json({ message: "You cannot request an exchange for your own book" });
       return;
     }
 
@@ -35,6 +35,13 @@ export async function requestExchange(req: Request, res: Response) {
       res.status(404).json({ message: "Requester not found" });
       return;
     }
+
+    await prisma.request.create({
+      data: {
+        requestedBookId: bookForExchange.id,
+        requesterId: requester.id,
+      },
+    });
 
     const bookListHtml = requester.books
       .map((b) => `<li>${b.name} — ${b.author}</li>`)
@@ -55,12 +62,12 @@ export async function requestExchange(req: Request, res: Response) {
       `,
     });
 
-    res.status(200).json({ message: "Exchange request sent" });
+    res.status(200).json({ message: "Exchange request sent and saved" });
   } catch (err) {
     const message =
       err instanceof Error
         ? err.message
-        : "Unknown error while quiring exchange";
+        : "Unknown error while requesting exchange";
     res.status(500).json({ message: message });
   }
 }
