@@ -6,6 +6,7 @@ export type User = {
     email: string;
     role: 'USER' | 'ADMIN';
     avatar: string | null;
+    books?: []
 };
 
 type AuthState = {
