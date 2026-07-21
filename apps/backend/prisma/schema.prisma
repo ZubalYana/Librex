@@ -44,6 +44,6 @@ model Book{
   photoUrl String?
   createdAt DateTime @default(now())
 
-  owner User @relation(fields: [ownerId], references: [id])
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String
 }
