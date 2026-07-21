@@ -4,11 +4,14 @@ import { useAlertStore } from '../../store/alertStore';
 import BookCard from '../ui/BookCard';
 import { Button } from '../ui/Button';
 import { Select } from '../ui/Select';
+import { SearchInput } from '../ui/SearchInput';
 
 export default function BooksList() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState('name-asc');
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [pagination, setPagination] = useState({
     booksLimit: 10,
     page: 1,
@@ -21,11 +24,24 @@ export default function BooksList() {
   const order = sort.endsWith('desc') ? 'desc' : 'asc';
 
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPagination((p) => ({ ...p, page: 1 })); 
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  useEffect(() => {
     setLoading(true);
-    apiFetch(
-      `/books/books?page=${pagination.page}&limit=${pagination.booksLimit}&order=${order}`,
-      { method: 'GET' }
-    )
+    const params = new URLSearchParams({
+      page: String(pagination.page),
+      limit: String(pagination.booksLimit),
+      order,
+      ...(debouncedSearch && { search: debouncedSearch }),
+    });
+
+    apiFetch(`/books/books?${params}`, { method: 'GET' })
       .then((res) => res.json())
       .then((data) => {
         setBooks(data.books);
@@ -33,7 +49,7 @@ export default function BooksList() {
       })
       .catch((err) => setAlert("error", err.message))
       .finally(() => setLoading(false));
-  }, [pagination.page, order]);
+  }, [pagination.page, order, debouncedSearch]);
 
   if (loading) {
     return <div>Loading books...</div>;
@@ -43,18 +59,23 @@ export default function BooksList() {
     <div className="w-full text-navy">
       <div className="w-full flex justify-between items-end">
         <h1 className="text-[20px] md:text-[24px] font-semibold">Community books:</h1>
-        <div className="w-[160px]">
-          <Select
-            value={sort}
-            onChange={(e) => {
-              setSort(e.target.value);
-              setPagination((p) => ({ ...p, page: 1 })); 
-            }}
-            options={[
-              { value: 'name-asc', label: 'Title A–Z' },
-              { value: 'name-desc', label: 'Title Z–A' },
-            ]}
-          />
+        <div className="flex gap-3">
+          <div className="w-full md:w-[240px]">
+            <SearchInput value={search} onChange={setSearch} placeholder="Search title or author" />
+          </div>
+          <div className="w-[160px] shrink-0">
+            <Select
+              value={sort}
+              onChange={(e) => {
+                setSort(e.target.value);
+                setPagination((p) => ({ ...p, page: 1 }));
+              }}
+              options={[
+                { value: 'name-asc', label: 'Title A–Z' },
+                { value: 'name-desc', label: 'Title Z–A' },
+              ]}
+            />
+          </div>
         </div>
       </div>
 
