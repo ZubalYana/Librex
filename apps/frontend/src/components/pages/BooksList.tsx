@@ -3,10 +3,12 @@ import { apiFetch } from "../../api/apiFetch";
 import { useAlertStore } from '../../store/alertStore';
 import BookCard from '../ui/BookCard';
 import { Button } from '../ui/Button';
+import { Select } from '../ui/Select';
 
 export default function BooksList() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [sort, setSort] = useState('name-asc');
   const [pagination, setPagination] = useState({
     booksLimit: 10,
     page: 1,
@@ -16,11 +18,14 @@ export default function BooksList() {
 
   const setAlert = useAlertStore((state) => state.setAlert);
 
+  const order = sort.endsWith('desc') ? 'desc' : 'asc';
+
   useEffect(() => {
     setLoading(true);
-    apiFetch(`/books/books?page=${pagination.page}&limit=${pagination.booksLimit}`, {
-      method: 'GET',
-    })
+    apiFetch(
+      `/books/books?page=${pagination.page}&limit=${pagination.booksLimit}&order=${order}`,
+      { method: 'GET' }
+    )
       .then((res) => res.json())
       .then((data) => {
         setBooks(data.books);
@@ -28,7 +33,7 @@ export default function BooksList() {
       })
       .catch((err) => setAlert("error", err.message))
       .finally(() => setLoading(false));
-  }, [pagination.page]); 
+  }, [pagination.page, order]);
 
   if (loading) {
     return <div>Loading books...</div>;
@@ -36,7 +41,23 @@ export default function BooksList() {
 
   return (
     <div className="w-full text-navy">
-      <h1 className="text-[20px] md:text-[24px] font-semibold">Community books:</h1>
+      <div className="w-full flex justify-between items-end">
+        <h1 className="text-[20px] md:text-[24px] font-semibold">Community books:</h1>
+        <div className="w-[160px]">
+          <Select
+            value={sort}
+            onChange={(e) => {
+              setSort(e.target.value);
+              setPagination((p) => ({ ...p, page: 1 })); 
+            }}
+            options={[
+              { value: 'name-asc', label: 'Title A–Z' },
+              { value: 'name-desc', label: 'Title Z–A' },
+            ]}
+          />
+        </div>
+      </div>
+
 
       {books.length === 0 ? (
         <div className="mt-4">No books found</div>
