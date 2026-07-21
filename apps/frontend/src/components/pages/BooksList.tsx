@@ -57,9 +57,9 @@ export default function BooksList() {
 
   return (
     <div className="w-full text-navy">
-      <div className="w-full flex justify-between items-end">
+      <div className="w-full flex flex-col md:flex-row md:justify-between md:items-end">
         <h1 className="text-[20px] md:text-[24px] font-semibold">Community books:</h1>
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-2 md:mt-0">
           <div className="w-full md:w-[240px]">
             <SearchInput value={search} onChange={setSearch} placeholder="Search title or author" />
           </div>

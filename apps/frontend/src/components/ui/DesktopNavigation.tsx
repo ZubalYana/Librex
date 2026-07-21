@@ -17,7 +17,7 @@ export default function DesktopNavigation() {
         <CombinedLogo />
       </NavLink>
 
-      <div className="flex gap-x-6 text-navy">
+      <div className="gap-x-6 text-navy hidden md:flex">
         <NavLink to="/app/books" className={navLinkClass}>
           All Books
         </NavLink>
@@ -30,7 +30,7 @@ export default function DesktopNavigation() {
       <NavLink
         to="/app/me"
         className={({ isActive }) =>
-          `transition-colors duration-200 ${
+          `transition-colors duration-200 hidden md:flex ${
             isActive ? "text-navy" : "text-navy/60 hover:text-navy"
           }`
         }
