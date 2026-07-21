@@ -101,6 +101,7 @@ export default function ProfileEditing({
             .then((res)=>res.json())
             .then((data)=>{
                 console.log(data);
+                onClose();
                 setAlert('info', 'Confirmation link has been sent to your new email');
             })
             .catch((err)=>{

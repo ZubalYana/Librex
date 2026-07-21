@@ -172,7 +172,7 @@ export async function editUserEmail(req: Request, res: Response){
 
         await prisma.user.update({where: {id: String(req.user?.userId)}, data: {pendingEmail: newEmail, emailChangeTokenHash: tokenHash, emailChangeExpiry: expiry}});
 
-        const emailConfirmationLink = `https://localhost:5173/change-email?token=${rawToken}&newEmail=${newEmail}`;
+        const emailConfirmationLink = `http://localhost:5173/change-email?token=${rawToken}&newEmail=${newEmail}`;
 
         await resend.emails.send({
             from: 'Librex <noreply@librex.pictureboooks.homes>',

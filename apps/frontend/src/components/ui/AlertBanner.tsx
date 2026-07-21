@@ -27,7 +27,7 @@ export function AlertBanner() {
       className={cn(
         "fixed top-4 left-1/2 -translate-x-1/2 z-100",
         "flex items-center gap-2 rounded-md border px-4 py-2.5 shadow-md",
-        "font-sans text-sm",
+        "font-sans text-sm z-9999",
         STYLES[alert.type]
       )}
     >
