@@ -98,7 +98,8 @@ export default function UsersList() {
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-9 h-9 rounded-full bg-navy/10 flex items-center justify-center shrink-0 font-serif text-sm font-semibold text-navy">
-                  {user.name?.[0]?.toUpperCase() ?? "?"}
+                  {user.avatar? 
+                  <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full background-center"/> : user.name?.[0]?.toUpperCase()}
                 </div>
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-ink truncate">
