@@ -40,7 +40,7 @@ export default function Register(){
     }
 
     return(
-        <div className="text-[#2B2D42] w-full h-screen p-[20px] flex flex-col md:p-[40px] n">
+        <div className="text-[#2B2D42] w-full h-screen p-[20px] flex flex-col md:px-[40px] n">
             <div className="w-full">
                 <CombinedLogo/>
             </div>
