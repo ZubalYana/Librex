@@ -6,6 +6,7 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { apiFetch } from "../../../api/apiFetch";
 import { useAlertStore } from "../../../store/alertStore";
+import { PasswordInput } from "../PasswordInput";
 // import { useAuthStore } from "../../../store/authStore";
 
 interface ProfileEditingProps {
@@ -25,6 +26,8 @@ export default function ProfileEditing({
     const [avatarChanged, setAvatarChanged] = useState(false);
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(true);
+    const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false);
     const setAlert = useAlertStore((state)=>(state.setAlert));
     // const setUser = useAuthStore((state)=>(state.setAuth))
 
@@ -41,6 +44,10 @@ export default function ProfileEditing({
     useEffect(()=>{
         setDisabled(!avatarChanged && name === user.name && email === user.email)
     }, [avatarChanged, name, email])
+
+    useEffect(()=>{
+        email !== user.email? setShowPassword(true) : setShowPassword(false);
+    }, [email])
 
     const onEdit = ()=>{
         setLoading(true);
@@ -89,7 +96,7 @@ export default function ProfileEditing({
         if(email != user.email){
             apiFetch('/user/edit-email', {
                 method: 'POST',
-                body: JSON.stringify({email: email})
+                body: JSON.stringify({newEmail: email, currentPassword: password})
             })
             .then((res)=>res.json())
             .then((data)=>{
@@ -137,9 +144,15 @@ export default function ProfileEditing({
             <div className="flex flex-col gap-y-3">
                 <Input value={name} onChange={(e)=>setName(e.target.value)} placeholder="Name"/>
                 <Input value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="Email"/>
+                {showPassword && (
+                    <PasswordInput showStrength={false} value={password} onChange={((e)=>setPassword(e.target.value))} placeholder="Password"/>
+                )}
             </div>
          </div>
-         <div className="w-full flex justify-center gap-x-4 mt-8">
+         {showPassword && (
+            <p className="text-[12px] text-navy/70 mt-4">*We need you to enter password before changing your email to confirm your identity.</p>
+         )}
+         <div className="w-full flex justify-between gap-x-4 mt-8">
               <Button variant="secondary" size="lg" onClick={() => onClose()}>
                 Cancel
               </Button>
@@ -147,7 +160,7 @@ export default function ProfileEditing({
                 variant="primary"
                 isLoading={loading}
                 size="lg"
-                className="w-[250px]"
+                className="w-[270px]"
                 onClick={() => onEdit()}
                 disabled={disabled}
               >
